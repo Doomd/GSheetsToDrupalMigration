@@ -1,0 +1,58 @@
+id: rooster_file_image
+label: "Rooster File Entity Creation Test"
+migration_tags:
+  - Rooster Business
+  - Doomd Migration
+source:
+  constants:
+    DRUPAL_FILE_DIRECTORY: "public://images_test/"
+
+  plugin: url
+  data_fetcher_plugin: http
+  data_parser_plugin: google_sheets
+  urls: "https://spreadsheets.google.com/feeds/list/1muU787iBWZXaAPqKo2hULs5wJFUn87x_mu5pruy8qqE/1/public/values?alt=json"
+  fields:
+    - name: src_photo_id
+      label: "Photo ID"
+      selector: uniqueid
+    - name: src_photo_url
+      label: "Photo URL"
+      selector: photourl
+  ids:
+    src_photo_id:
+      type: integer
+
+process:
+  psuedo_destination_filename:
+    -
+      plugin: callback
+      callable: basename
+      source: src_photo_url
+    -
+      plugin: skip_on_empty
+      method: row
+      message: 'empty image filename.'
+
+  psuedo_destination_full_path:
+    - plugin: concat
+      source:
+        - constants/DRUPAL_FILE_DIRECTORY
+        - "@psuedo_destination_filename"
+    - plugin: urlencode
+  psuedo_source_image_path:
+    plugin: urlencode
+    source: src_photo_url # This is the photo URL column.
+  uri:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: "@psuedo_source_image_path"
+    -
+      plugin: file_copy
+      source:
+        - "@psuedo_source_image_path"
+        - "@psuedo_destination_full_path"
+      file_exists: "use existing"
+      move: FALSE
+destination:
+  plugin: "entity:file"

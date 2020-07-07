@@ -1,0 +1,214 @@
+id: rooster_node_business_location
+label: "Doomd migration of Business Location Rooster Data from Google Sheets to Drupal"
+migration_tags:
+  - Rooster Business
+  - Doomd Migration
+source:
+  constants:
+    PHOTO_DESCRIPTION_PREFIX: "Photo of "
+
+  plugin: url
+  data_fetcher_plugin: http
+  data_parser_plugin: google_sheets
+  urls: "https://spreadsheets.google.com/feeds/list/1muU787iBWZXaAPqKo2hULs5wJFUn87x_mu5pruy8qqE/1/public/values?alt=json"
+  fields:
+    - name: src_unique_id
+      label: "Unique ID"
+      selector: uniqueid
+
+    - name: src_name
+      label: "Name"
+      selector: name
+
+    - name: src_pb_ref
+      label: "Business Parent Ref ID"
+      selector: pbref
+
+    - name: src_uid
+      label: "User ID"
+      selector: userid
+
+    - name: src_photo_id
+      label: "Photo ID"
+      selector: uniqueid
+
+    # - name: src_multi_photo_id
+    #   label: "Multi Photo ID"
+    #   selector: multiphotoid
+
+    - name: src_bus_type
+      label: "Business Type"
+      selector: businesstype
+
+    - name: src_address1
+      label: "Address1"
+      selector: "address1"
+    - name: src_address2
+      label: "Address2"
+      selector: "address2"
+    - name: src_city
+      label: "City"
+      selector: "city"
+    - name: src_state
+      label: "State"
+      selector: "state"
+    - name: src_postal_code
+      label: "Postal Code"
+      selector: "postalcode"
+    - name: src_sun1
+      label: "Sunday 1"
+      selector: "sun1"
+    - name: src_sun2
+      label: "Sunday 2"
+      selector: "sun2"
+    - name: src_mon1
+      label: "Monday 1"
+      selector: "mon1"
+    - name: src_mon2
+      label: "Monday 2"
+      selector: "mon2"
+    - name: src_tue1
+      label: "Tuesday 1"
+      selector: "tue1"
+    - name: src_tue2
+      label: "Tuesday 2"
+      selector: "tue2"
+    - name: src_wed1
+      label: "Wednesday 1"
+      selector: "wed1"
+    - name: src_wed2
+      label: "Wednesday 2"
+      selector: "wed2"
+    - name: src_thu1
+      label: "Thursday 1"
+      selector: "thu1"
+    - name: src_thu2
+      label: "Thursday 2"
+      selector: "thu2"
+    - name: src_fri1
+      label: "Friday 1"
+      selector: "fri1"
+    - name: src_fri2
+      label: "Friday 2"
+      selector: "fri2"
+    - name: src_sat1
+      label: "Saturday 1"
+      selector: "sat1"
+    - name: src_sat2
+      label: "Saturday 2"
+      selector: "sat2"
+
+  ids:
+    src_unique_id:
+      type: integer
+process:
+  title: src_name
+  uid:
+    - plugin: migration_lookup
+      migration: rooster_users
+      source: src_uid
+    - plugin: default_value
+      default_value: 1
+
+  #Single Photo Works...
+  field_media_test/target_id:
+    plugin: migration_lookup
+    migration: rooster_file_image_to_media
+    source: src_photo_id
+
+  #attempt to link multiple photos per node
+  # field_media_test:
+    # - plugin: explode
+    #   source: src_multi_photo_id
+    #   delimiter: ";"
+    # - plugin: callback
+    #   callable: trim
+    # - plugin: single_value
+    # - plugin: sub_process
+    #   process:
+    #     target_id:
+    #       - plugin: migration_lookup
+    #         migration: rooster_file_image_to_media
+    #         source: src_multi_photo_id
+
+  field_business_name:
+    plugin: migration_lookup
+    migration: rooster_node_parent_business
+    source: src_pb_ref
+
+  field_business_type:
+    - plugin: skip_on_empty
+      source: src_bus_type
+      method: process
+      message: "No src_bus_type listed."
+    - plugin: explode
+      delimiter: ";"
+    - plugin: callback
+      callable: trim
+    - plugin: entity_generate
+      entity_type: taxonomy_term
+      value_key: name
+      bundle_key: vid
+      bundle: business_type
+
+  field_address/country_code:
+    plugin: default_value
+    default_value: "US"
+  field_address/address_line1: src_address1
+  field_address/address_line2: src_address2
+  field_address/locality: src_city
+  field_address/administrative_area: src_state
+  field_address/postal_code: src_postal_code
+  # Unused fields that may have to be declared here anyway:
+  field_address/langcode:
+    plugin: default_value
+    default_value: ""
+  field_address/dependent_locality:
+    plugin: default_value
+    default_value: null
+  field_address/sorting_code:
+    plugin: default_value
+    default_value: null
+  field_address/organization:
+    plugin: default_value
+    default_value: null
+  field_address/given_name:
+    plugin: default_value
+    default_value: null
+  field_address/additional_name:
+    plugin: default_value
+    default_value: null
+  field_address/family_name:
+    plugin: default_value
+    default_value: null
+
+  field_hours:
+    plugin: csv_office_hours
+    slots_per_day: 2
+    delimiter: "-"
+    source:
+      - src_sun1
+      - src_sun2
+      - src_mon1
+      - src_mon2
+      - src_tue1
+      - src_tue2
+      - src_wed1
+      - src_wed2
+      - src_thu1
+      - src_thu2
+      - src_fri1
+      - src_fri2
+      - src_sat1
+      - src_sat2
+
+destination:
+  plugin: "entity:node"
+  default_bundle: business_branch
+migration_dependencies:
+  required:
+    - rooster_file_image
+    - rooster_node_parent_business
+    - rooster_file_image_to_media
+    - rooster_users
+  optional: []

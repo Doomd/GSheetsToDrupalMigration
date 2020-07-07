@@ -1,0 +1,83 @@
+id: rooster_users
+label: "Rooster Business Users Migration"
+migration_tags:
+  - Rooster Business
+  - Doomd Migration
+
+source:
+  plugin: url
+  data_fetcher_plugin: http
+  data_parser_plugin: google_sheets
+  urls: "https://spreadsheets.google.com/feeds/list/1muU787iBWZXaAPqKo2hULs5wJFUn87x_mu5pruy8qqE/4/public/values?alt=json"
+  fields:
+    - name: src_uid
+      label: "User ID"
+      selector: userid
+
+    - name: src_username
+      label: "Username"
+      selector: username
+
+    - name: src_email
+      label: "Email"
+      selector: email
+
+    - name: src_roles
+      label: "User Roles"
+      selector: userroles
+
+    - name: src_password
+      label: "Password"
+      selector: password
+
+  ids:
+    src_uid:
+      type: string
+
+process:
+  mail: src_email
+  init: src_email
+  name:
+    - plugin: get
+      source: src_username
+    # -
+    #   plugin: machine_name
+    #   source: src_username
+    - plugin: make_unique_entity_field
+      entity_type: user
+      field: name
+      postfix: _
+      
+  pass:
+    plugin: callback
+    callable: md5
+    source: src_password
+  status:
+    # -
+    #   plugin: static_map
+    #   source: user_status
+    # map:
+    #   inactive: 0
+    #   active: 1
+    - plugin: default_value
+      default_value: 1
+  roles:
+    - plugin: skip_on_empty
+      method: process
+      source: src_roles
+    - plugin: explode
+      delimiter: ";"
+    - plugin: callback
+      callable: trim
+    - plugin: static_map
+      map:
+        "BusinessOwner": business_owner
+        "BusinessManager": business_manager
+        "BusinessEditor": business_editor
+      default_value: null
+destination:
+  plugin: "entity:user"
+  md5_passwords: true
+migration_dependencies:
+  required: []
+  optional: []

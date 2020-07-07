@@ -1,0 +1,88 @@
+id: rooster_file_image_to_media
+label: "Rooster Convert File Image Entities to Proper Media Entities"
+migration_tags:
+  - Rooster Business
+  - Doomd Migration
+
+source:
+  # constants:
+  #   MEDIA_NAME_PREFIX: 'Photo of'
+  plugin: url
+  data_fetcher_plugin: http
+  data_parser_plugin: google_sheets
+  urls: "https://spreadsheets.google.com/feeds/list/1muU787iBWZXaAPqKo2hULs5wJFUn87x_mu5pruy8qqE/1/public/values?alt=json"
+  fields:
+    - name: src_photo_id
+      label: "Photo ID"
+      selector: uniqueid
+    - name: src_business_location_name
+      label: "Name"
+      selector: name
+    - name: src_photo_url
+      label: "Photo URL"
+      selector: photourl
+    - name: src_uid
+      label: "User ID"
+      selector: userid
+  ids:
+    src_photo_id:
+      type: integer
+
+process:
+  psuedo_destination_filename:
+    - plugin: callback
+      callable: basename
+      source: src_photo_url
+    - plugin: skip_on_empty
+      method: row
+      message: "empty image filename."
+
+  psuedo_destination_path:
+    - plugin: concat
+      source:
+        - "@psuedo_destination_filename"
+
+  psuedo_title:
+    - plugin: concat
+      source:
+        - src_business_location_name
+      #   - "Photo"
+      # delimiter: " "
+
+  psuedo_alt:
+    - plugin: concat
+      source:
+        - "Photo of"
+        - src_business_location_name
+      delimiter: " "
+
+  name: "@psuedo_title"
+  field_media_image/alt: "@psuedo_alt"
+
+  field_media_image/target_id:
+    plugin: migration_lookup
+    migration: rooster_file_image
+    source: src_photo_id
+
+  # thumbnail/target_id:
+  #   plugin: migration_lookup
+  #   migration: rooster_file_image
+  #   source: src_photo_id
+  uid:
+    - plugin: migration_lookup
+      migration: rooster_users
+      source: src_uid
+    #   -
+    #     plugin: skip_on_empty
+    #     method: process
+    #     message: "No user for this file"
+    - plugin: default_value
+      default_value: 1
+
+destination:
+  plugin: "entity:media"
+  default_bundle: image
+migration_dependencies:
+  required:
+    - rooster_file_image
+    - rooster_users

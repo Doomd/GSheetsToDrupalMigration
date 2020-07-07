@@ -1,0 +1,46 @@
+id: rooster_node_parent_business
+label: "Doomd UD dependee paragraph migration for Google Sheets source example"
+migration_tags:
+  - Rooster Business
+  - Doomd Migration
+source:
+  plugin: url
+  data_fetcher_plugin: http
+  data_parser_plugin: google_sheets
+  urls: "https://spreadsheets.google.com/feeds/list/1muU787iBWZXaAPqKo2hULs5wJFUn87x_mu5pruy8qqE/3/public/values?alt=json"
+  fields:
+    -
+      name: src_pb_id
+      label: "Parent Business ID"
+      selector: pbid
+    -
+      name: src_pb_name
+      label: "Parent Business Name"
+      selector: name
+    -
+      name: src_uid
+      label: "User ID"
+      selector: userid
+  ids:
+    src_pb_id:
+      type: string
+process:
+  title: src_pb_name
+  uid:
+    -
+      plugin: migration_lookup
+      migration: rooster_users
+      source: src_uid
+    # -
+    #   plugin: skip_on_empty
+    #   method: process
+    #   message: "No user for this file"
+    -
+      plugin: default_value
+      default_value: 1
+destination:
+  plugin: 'entity:node'
+  default_bundle: business_top
+migration_dependencies:
+  required:
+    - rooster_users
