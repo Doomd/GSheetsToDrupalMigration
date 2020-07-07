@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\doomd_migrations\gstd_migration\Plugin\migrate\process;
+namespace Drupal\gstd_migration\Plugin\migrate\process;
 
 use Drupal\Component\Transliteration\TransliterationInterface;
 use Drupal\Core\Language\LanguageInterface;
