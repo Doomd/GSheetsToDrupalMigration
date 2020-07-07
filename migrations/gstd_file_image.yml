@@ -35,8 +35,10 @@ process:
       source:
         - constants/DRUPAL_FILE_DIRECTORY
         - "@psuedo_destination_filename"
+    # if your destination for some reason has spaces in the path, you'll want to uncomment:
     # - plugin: urlencode
   psuedo_source_image_path:
+    # if your source field has spaces in the path, you'll want to uncomment:
     # plugin: urlencode
     plugin: get
     source: src_photo_url # This is the photo URL column.
