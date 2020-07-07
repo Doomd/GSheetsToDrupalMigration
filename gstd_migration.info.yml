@@ -5,11 +5,11 @@ package: GoogleSheetsToDrupal
 core: 8.x
 dependencies:
   - drupal:migrate
-  - drupal:migrate_plus
-  - drupal:migrate_tools
+  - migrate_plus
+  - migrate_tools
   - migrate_google_sheets:migrate_google_sheets
-  - drupal:address
-  - drupal:office_hours
+  - address
+  - office_hours
   # - entity_reference_revisions:entity_reference_revisions
   # The following dependency needs to be added info if the backup CSV migration will be used.
   #- migrate_source_csv:migrate_source_csv (>=8.x-3.x)
