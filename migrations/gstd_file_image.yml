@@ -23,14 +23,12 @@ source:
 
 process:
   psuedo_destination_filename:
-    -
-      plugin: callback
+    - plugin: callback
       callable: basename
       source: src_photo_url
-    -
-      plugin: skip_on_empty
+    - plugin: skip_on_empty
       method: row
-      message: 'empty image filename.'
+      message: "empty image filename."
 
   psuedo_destination_full_path:
     - plugin: concat
@@ -42,16 +40,17 @@ process:
     plugin: urlencode
     source: src_photo_url # This is the photo URL column.
   uri:
-    -
-      plugin: skip_on_empty
+    - plugin: skip_on_empty
       method: process
       source: "@psuedo_source_image_path"
-    -
-      plugin: file_copy
+    # class FileCopy: https://api.drupal.org/api/drupal/core%21modules%21migrate%21src%21Plugin%21migrate%21process%21FileCopy.php/class/FileCopy/
+    - plugin: file_copy
       source:
         - "@psuedo_source_image_path"
         - "@psuedo_destination_full_path"
-      file_exists: "use existing"
+      file_exists: "replace"
+      # file_exists: "rename"
+      # file_exists: "use existing"
       move: FALSE
 destination:
   plugin: "entity:file"
