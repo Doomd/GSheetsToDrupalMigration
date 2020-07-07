@@ -26,9 +26,9 @@ process:
     - plugin: callback
       callable: basename
       source: src_photo_url
-    - plugin: machine_name
-      replace_pattern: '[^a-z0-9_.\.]+'
-      replace: '+' #test
+      #provided by migrate_plus https://git.drupalcode.org/project/migrate_plus/blob/HEAD/src/Plugin/migrate/process/Transliteration.php
+    - plugin: transliteration
+    # - plugin: machine_name # sadly, also strips out dots from file extension :(
     - plugin: skip_on_empty
       method: row
       message: "empty image filename."
