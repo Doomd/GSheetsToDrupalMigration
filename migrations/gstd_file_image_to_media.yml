@@ -1,8 +1,7 @@
 id: rooster_file_image_to_media
 label: "Rooster Convert File Image Entities to Proper Media Entities"
 migration_tags:
-  - Rooster Business
-  - Doomd Migration
+  - gstd migration
 
 source:
   # constants:
@@ -10,7 +9,7 @@ source:
   plugin: url
   data_fetcher_plugin: http
   data_parser_plugin: google_sheets
-  urls: "https://spreadsheets.google.com/feeds/list/1muU787iBWZXaAPqKo2hULs5wJFUn87x_mu5pruy8qqE/1/public/values?alt=json"
+  urls: "https://spreadsheets.google.com/feeds/list/1GuKab6Ezi3GckSjMD5BmAQVa0qnOKJX9kadWz_mDxcU/1/public/values?alt=json"
   fields:
     - name: src_photo_id
       label: "Photo ID"

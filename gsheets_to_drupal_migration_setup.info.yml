@@ -1,12 +1,14 @@
 type: module
-name: Rooster Migration Setup
-description: 'Customized from Google Sheets migration at <a href="https://understanddrupal.com/migrations" title="Drupal Migrations">https://understanddrupal.com/migrations</a>.'
-package: Understand Drupal
+name: GTSD (Google Sheets to Drupal) Migration Setup
+description: 'Google Sheets to Drupal Migration Setup Module'
+package: GSheetsToDrupal
 core: 8.x
 dependencies:
   - drupal:migrate
-  # - entity_reference_revisions:entity_reference_revisions
+  - migrate_plus
+  - migrate_tools
   - migrate_google_sheets:migrate_google_sheets
+  # - entity_reference_revisions:entity_reference_revisions
   # The following dependency needs to be added info if the backup CSV migration will be used.
   #- migrate_source_csv:migrate_source_csv (>=8.x-3.x)
   # - migrate_spreadsheet:migrate_spreadsheet

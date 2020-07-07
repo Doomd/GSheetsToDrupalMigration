@@ -1,13 +1,13 @@
-id: rooster_node_parent_business
+id: gstd_node_parent_business
 label: "Doomd UD dependee paragraph migration for Google Sheets source example"
 migration_tags:
-  - Rooster Business
-  - Doomd Migration
+  - gstd migration
+
 source:
   plugin: url
   data_fetcher_plugin: http
   data_parser_plugin: google_sheets
-  urls: "https://spreadsheets.google.com/feeds/list/1muU787iBWZXaAPqKo2hULs5wJFUn87x_mu5pruy8qqE/3/public/values?alt=json"
+  urls: "https://spreadsheets.google.com/feeds/list/1GuKab6Ezi3GckSjMD5BmAQVa0qnOKJX9kadWz_mDxcU/3/public/values?alt=json"
   fields:
     -
       name: src_pb_id
@@ -29,7 +29,7 @@ process:
   uid:
     -
       plugin: migration_lookup
-      migration: rooster_users
+      migration: gstd_users
       source: src_uid
     # -
     #   plugin: skip_on_empty
@@ -43,4 +43,4 @@ destination:
   default_bundle: business_top
 migration_dependencies:
   required:
-    - rooster_users
+    - gstd_users

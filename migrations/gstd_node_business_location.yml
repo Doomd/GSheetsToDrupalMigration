@@ -1,8 +1,8 @@
-id: rooster_node_business_location
-label: "Doomd migration of Business Location Rooster Data from Google Sheets to Drupal"
+id: gstd_node_business_location
+label: "Doomd migration of Business Location gstd Data from Google Sheets to Drupal"
 migration_tags:
-  - Rooster Business
-  - Doomd Migration
+  - gstd migration
+
 source:
   constants:
     PHOTO_DESCRIPTION_PREFIX: "Photo of "
@@ -10,7 +10,7 @@ source:
   plugin: url
   data_fetcher_plugin: http
   data_parser_plugin: google_sheets
-  urls: "https://spreadsheets.google.com/feeds/list/1muU787iBWZXaAPqKo2hULs5wJFUn87x_mu5pruy8qqE/1/public/values?alt=json"
+  urls: "https://spreadsheets.google.com/feeds/list/1GuKab6Ezi3GckSjMD5BmAQVa0qnOKJX9kadWz_mDxcU/1/public/values?alt=json"
   fields:
     - name: src_unique_id
       label: "Unique ID"
@@ -105,7 +105,7 @@ process:
   title: src_name
   uid:
     - plugin: migration_lookup
-      migration: rooster_users
+      migration: gstd_users
       source: src_uid
     - plugin: default_value
       default_value: 1
@@ -113,7 +113,7 @@ process:
   #Single Photo Works...
   field_media_test/target_id:
     plugin: migration_lookup
-    migration: rooster_file_image_to_media
+    migration: gstd_file_image_to_media
     source: src_photo_id
 
   #attempt to link multiple photos per node
@@ -128,12 +128,12 @@ process:
     #   process:
     #     target_id:
     #       - plugin: migration_lookup
-    #         migration: rooster_file_image_to_media
+    #         migration: gstd_file_image_to_media
     #         source: src_multi_photo_id
 
   field_business_name:
     plugin: migration_lookup
-    migration: rooster_node_parent_business
+    migration: gstd_node_parent_business
     source: src_pb_ref
 
   field_business_type:
@@ -207,8 +207,8 @@ destination:
   default_bundle: business_branch
 migration_dependencies:
   required:
-    - rooster_file_image
-    - rooster_node_parent_business
-    - rooster_file_image_to_media
-    - rooster_users
+    - gstd_file_image
+    - gstd_node_parent_business
+    - gstd_file_image_to_media
+    - gstd_users
   optional: []

@@ -1,8 +1,7 @@
-id: rooster_file_image
-label: "Rooster File Entity Creation Test"
+id: gstd_file_image
+label: "gstd File Entity Creation Test"
 migration_tags:
-  - Rooster Business
-  - Doomd Migration
+  - gstd migration
 source:
   constants:
     DRUPAL_FILE_DIRECTORY: "public://images_test/"
@@ -10,7 +9,7 @@ source:
   plugin: url
   data_fetcher_plugin: http
   data_parser_plugin: google_sheets
-  urls: "https://spreadsheets.google.com/feeds/list/1muU787iBWZXaAPqKo2hULs5wJFUn87x_mu5pruy8qqE/1/public/values?alt=json"
+  urls: "https://spreadsheets.google.com/feeds/list/1GuKab6Ezi3GckSjMD5BmAQVa0qnOKJX9kadWz_mDxcU/1/public/values?alt=json"
   fields:
     - name: src_photo_id
       label: "Photo ID"

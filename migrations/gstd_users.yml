@@ -1,14 +1,14 @@
-id: rooster_users
-label: "Rooster Business Users Migration"
+id: gstd_users
+label: "GSTD Business Users Migration"
 migration_tags:
-  - Rooster Business
-  - Doomd Migration
+  - gstd migration
+
 
 source:
   plugin: url
   data_fetcher_plugin: http
   data_parser_plugin: google_sheets
-  urls: "https://spreadsheets.google.com/feeds/list/1muU787iBWZXaAPqKo2hULs5wJFUn87x_mu5pruy8qqE/4/public/values?alt=json"
+  urls: "https://spreadsheets.google.com/feeds/list/1GuKab6Ezi3GckSjMD5BmAQVa0qnOKJX9kadWz_mDxcU/4/public/values?alt=json"
   fields:
     - name: src_uid
       label: "User ID"
@@ -47,7 +47,7 @@ process:
       entity_type: user
       field: name
       postfix: _
-      
+
   pass:
     plugin: callback
     callable: md5
