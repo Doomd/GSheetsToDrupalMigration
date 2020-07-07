@@ -49,8 +49,8 @@ process:
         - "@psuedo_source_image_path"
         - "@psuedo_destination_full_path"
       # file_exists: "replace"
-      file_exists: "rename"
-      # file_exists: "use existing"
+      # file_exists: "rename"
+      file_exists: "use existing"
       move: FALSE
 destination:
   plugin: "entity:file"
