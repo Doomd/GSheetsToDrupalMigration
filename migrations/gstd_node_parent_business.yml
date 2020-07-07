@@ -1,5 +1,5 @@
 id: gstd_node_parent_business
-label: "Doomd UD dependee paragraph migration for Google Sheets source example"
+label: "Parent Business (business_top) will be linked to many child business locations (business_branch)"
 migration_tags:
   - gstd migration
 
@@ -24,6 +24,7 @@ source:
   ids:
     src_pb_id:
       type: string
+      
 process:
   title: src_pb_name
   uid:

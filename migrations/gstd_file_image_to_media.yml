@@ -1,5 +1,5 @@
-id: rooster_file_image_to_media
-label: "Rooster Convert File Image Entities to Proper Media Entities"
+id: gstd_file_image_to_media
+label: "GSTD links files to to Media Entities"
 migration_tags:
   - gstd migration
 
@@ -9,23 +9,26 @@ source:
   plugin: url
   data_fetcher_plugin: http
   data_parser_plugin: google_sheets
-  urls: "https://spreadsheets.google.com/feeds/list/1GuKab6Ezi3GckSjMD5BmAQVa0qnOKJX9kadWz_mDxcU/1/public/values?alt=json"
+  urls: "https://spreadsheets.google.com/feeds/list/1GuKab6Ezi3GckSjMD5BmAQVa0qnOKJX9kadWz_mDxcU/2/public/values?alt=json"
   fields:
     - name: src_photo_id
       label: "Photo ID"
-      selector: uniqueid
-    - name: src_business_location_name
-      label: "Name"
-      selector: name
+      selector: photoid
+    - name: src_title
+      label: "Photo Title"
+      selector: phototitle
     - name: src_photo_url
       label: "Photo URL"
       selector: photourl
+    - name: src_alt
+      label: "Photo Alt"
+      selector: photoalt
     - name: src_uid
       label: "User ID"
       selector: userid
   ids:
     src_photo_id:
-      type: integer
+      type: string
 
 process:
   psuedo_destination_filename:
@@ -41,35 +44,33 @@ process:
       source:
         - "@psuedo_destination_filename"
 
-  psuedo_title:
-    - plugin: concat
-      source:
-        - src_business_location_name
-      #   - "Photo"
-      # delimiter: " "
+  # psuedo_title:
+  #   - plugin: concat
+  #     source:
+  #       - src_business_location_name
+  #       - "Photo"
+  #     delimiter: " "
+  psuedo_title: src_title
 
-  psuedo_alt:
-    - plugin: concat
-      source:
-        - "Photo of"
-        - src_business_location_name
-      delimiter: " "
+  # psuedo_alt:
+  #   - plugin: concat
+  #     source:
+  #       - "Photo of"
+  #       - src_business_location_name
+  #     delimiter: " "
+  psuedo_alt: src_alt
 
   name: "@psuedo_title"
   field_media_image/alt: "@psuedo_alt"
 
   field_media_image/target_id:
     plugin: migration_lookup
-    migration: rooster_file_image
+    migration: gstd_file_image
     source: src_photo_id
 
-  # thumbnail/target_id:
-  #   plugin: migration_lookup
-  #   migration: rooster_file_image
-  #   source: src_photo_id
   uid:
     - plugin: migration_lookup
-      migration: rooster_users
+      migration: gstd_users
       source: src_uid
     #   -
     #     plugin: skip_on_empty
@@ -83,5 +84,5 @@ destination:
   default_bundle: image
 migration_dependencies:
   required:
-    - rooster_file_image
-    - rooster_users
+    - gstd_file_image
+    - gstd_users

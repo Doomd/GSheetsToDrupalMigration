@@ -1,12 +1,9 @@
 id: gstd_node_business_location
-label: "Doomd migration of Business Location gstd Data from Google Sheets to Drupal"
+label: "Primary Content Type: Business Location/Branch (business_branch)"
 migration_tags:
   - gstd migration
 
 source:
-  constants:
-    PHOTO_DESCRIPTION_PREFIX: "Photo of "
-
   plugin: url
   data_fetcher_plugin: http
   data_parser_plugin: google_sheets
@@ -30,11 +27,11 @@ source:
 
     - name: src_photo_id
       label: "Photo ID"
-      selector: uniqueid
+      selector: photoid
 
-    # - name: src_multi_photo_id
-    #   label: "Multi Photo ID"
-    #   selector: multiphotoid
+    - name: src_multi_photo_id
+      label: "Multi Photo ID"
+      selector: multiphotoid
 
     - name: src_bus_type
       label: "Business Type"
@@ -116,7 +113,7 @@ process:
     migration: gstd_file_image_to_media
     source: src_photo_id
 
-  #attempt to link multiple photos per node
+  #attempt to link multiple media items per node (Doesn't work)
   # field_media_test:
     # - plugin: explode
     #   source: src_multi_photo_id

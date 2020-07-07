@@ -1,25 +1,25 @@
 id: gstd_file_image
-label: "gstd File Entity Creation Test"
+label: "gstd File Entity Creation"
 migration_tags:
   - gstd migration
 source:
   constants:
-    DRUPAL_FILE_DIRECTORY: "public://images_test/"
+    DRUPAL_FILE_DIRECTORY: "public://business_branch_photos/"
 
   plugin: url
   data_fetcher_plugin: http
   data_parser_plugin: google_sheets
-  urls: "https://spreadsheets.google.com/feeds/list/1GuKab6Ezi3GckSjMD5BmAQVa0qnOKJX9kadWz_mDxcU/1/public/values?alt=json"
+  urls: "https://spreadsheets.google.com/feeds/list/1GuKab6Ezi3GckSjMD5BmAQVa0qnOKJX9kadWz_mDxcU/2/public/values?alt=json"
   fields:
     - name: src_photo_id
       label: "Photo ID"
-      selector: uniqueid
+      selector: photoid
     - name: src_photo_url
       label: "Photo URL"
       selector: photourl
   ids:
     src_photo_id:
-      type: integer
+      type: string
 
 process:
   psuedo_destination_filename:

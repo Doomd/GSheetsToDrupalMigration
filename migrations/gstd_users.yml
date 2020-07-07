@@ -3,7 +3,6 @@ label: "GSTD Business Users Migration"
 migration_tags:
   - gstd migration
 
-
 source:
   plugin: url
   data_fetcher_plugin: http
@@ -40,8 +39,8 @@ process:
   name:
     - plugin: get
       source: src_username
-    # -
-    #   plugin: machine_name
+    # disable the following plugin to allow email addresses for usernames
+    # - plugin: machine_name
     #   source: src_username
     - plugin: make_unique_entity_field
       entity_type: user
@@ -59,6 +58,7 @@ process:
     # map:
     #   inactive: 0
     #   active: 1
+    # automatically activate all migration created users:
     - plugin: default_value
       default_value: 1
   roles:
