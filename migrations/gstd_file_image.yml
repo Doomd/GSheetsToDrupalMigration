@@ -26,6 +26,7 @@ process:
     - plugin: callback
       callable: basename
       source: src_photo_url
+    - plugin: machine_name
     - plugin: skip_on_empty
       method: row
       message: "empty image filename."
