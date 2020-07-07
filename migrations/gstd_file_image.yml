@@ -35,9 +35,10 @@ process:
       source:
         - constants/DRUPAL_FILE_DIRECTORY
         - "@psuedo_destination_filename"
-    - plugin: urlencode
+    # - plugin: urlencode
   psuedo_source_image_path:
-    plugin: urlencode
+    # plugin: urlencode
+    plugin: get
     source: src_photo_url # This is the photo URL column.
   uri:
     - plugin: skip_on_empty
