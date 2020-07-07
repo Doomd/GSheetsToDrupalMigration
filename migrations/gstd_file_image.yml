@@ -29,6 +29,7 @@ process:
       #provided by migrate_plus https://git.drupalcode.org/project/migrate_plus/blob/HEAD/src/Plugin/migrate/process/Transliteration.php
     # - plugin: transliteration # doesn't do enough
     # - plugin: machine_name # sadly, also strips out dots from file extension :(
+    - plugin: clean_filename
     - plugin: skip_on_empty
       method: row
       message: "empty image filename."
@@ -60,3 +61,7 @@ process:
       move: FALSE
 destination:
   plugin: "entity:file"
+dependencies:
+  enforced:
+    module:
+      - GSTD

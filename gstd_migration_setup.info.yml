@@ -1,7 +1,7 @@
 type: module
-name: GSTD (Google Sheets to Drupal) Migration Setup
+name: GSTD
 description: 'Google Sheets to Drupal Migration Setup Module'
-package: GSheetsToDrupal
+package: GoogleSheetsToDrupal
 core: 8.x
 dependencies:
   - drupal:migrate
