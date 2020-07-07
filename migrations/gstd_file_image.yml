@@ -27,7 +27,7 @@ process:
       callable: basename
       source: src_photo_url
     - plugin: machine_name
-      replace_pattern: '[^a-z0-9_\.]+'
+      replace_pattern: '[^a-z0-9_.]+'
     - plugin: skip_on_empty
       method: row
       message: "empty image filename."
